@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestable — Intelligent Horse Management Engine</title>
+  <meta name="description" content="The AI-powered operating system for modern horse racing stables. Nuestable transforms stable operations, health compliance, and owner transparency into a single intelligent platform.">
+  <meta property="og:title" content="Nuestable — Intelligent Horse Management Engine">
+  <meta property="og:description" content="The AI-powered operating system for modern horse racing stables.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --emerald-50: #ecfdf5;
+      --emerald-100: #d1fae5;
+      --emerald-200: #a7f3d0;
+      --emerald-400: #34d399;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --emerald-700: #047857;
+      --emerald-800: #065f46;
+      --emerald-900: #064e3b;
+      --emerald-950: #022c22;
+      --gold-400: #facc15;
+      --gold-500: #eab308;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--slate-800);
+      line-height: 1.6;
+      background: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.85);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.3s;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--emerald-900);
+    }
+    .nav-logo svg { width: 36px; height: 36px; }
+    .nav-logo span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--slate-600);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--emerald-700); }
+    .nav-cta {
+      background: var(--emerald-700) !important;
+      color: #fff !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--emerald-800) !important; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      background: linear-gradient(170deg, var(--emerald-950) 0%, var(--emerald-900) 30%, var(--emerald-800) 60%, var(--emerald-700) 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      color: var(--emerald-200);
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px;
+      background: var(--emerald-400);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 .accent { color: var(--emerald-300); }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--emerald-100);
+      max-width: 650px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #fff;
+      color: var(--emerald-900);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--emerald-300);
+      margin-top: 0.3rem;
+      font-weight: 400;
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--emerald-600);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--slate-900);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .section-subtitle {
+      font-size: 1.15rem;
+      color: var(--slate-500);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ─── PROBLEM / OPPORTUNITY ─── */
+    .problem {
+      background: var(--slate-50);
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: center;
+    }
+    .problem-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .problem-stat {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--slate-200);
+      transition: all 0.3s;
+    }
+    .problem-stat:hover { border-color: var(--emerald-300); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    .problem-stat .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--emerald-700);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .problem-stat .label {
+      font-size: 0.85rem;
+      color: var(--slate-600);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* ─── FEATURES ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2.5rem;
+      border: 1px solid var(--slate-200);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover { border-color: var(--emerald-300); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    .feature-icon.green { background: var(--emerald-100); color: var(--emerald-700); }
+    .feature-icon.blue { background: #dbeafe; color: #1d4ed8; }
+    .feature-icon.purple { background: #ede9fe; color: #6d28d9; }
+    .feature-icon.amber { background: #fef3c7; color: #b45309; }
+    .feature-icon.rose { background: #ffe4e6; color: #be123c; }
+    .feature-icon.cyan { background: #cffafe; color: #0e7490; }
+    .feature-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 0.75rem;
+    }
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--slate-500);
+      line-height: 1.6;
+    }
+
+    /* ─── PLATFORM ─── */
+    .platform { background: var(--slate-900); color: #fff; }
+    .platform .section-label { color: var(--emerald-400); }
+    .platform .section-title { color: #fff; }
+    .platform .section-subtitle { color: var(--slate-400); }
+    .platform-visual {
+      margin-top: 3rem;
+      background: linear-gradient(135deg, var(--emerald-900), var(--slate-800));
+      border-radius: 24px;
+      padding: 3rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .platform-modules {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .module {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+    .module:hover { background: rgba(255,255,255,0.1); border-color: var(--emerald-400); }
+    .module-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    .module-desc { font-size: 0.8rem; color: var(--slate-400); line-height: 1.5; }
+    .module-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(52,211,153,0.15);
+      color: var(--emerald-400);
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── MARKET ─── */
+    .market-numbers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .market-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid var(--slate-200);
+      transition: all 0.3s;
+    }
+    .market-card:hover { border-color: var(--emerald-300); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    .market-value {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--emerald-700);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .market-label {
+      font-size: 0.9rem;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+    .market-sublabel {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── REVENUE ─── */
+    .revenue { background: var(--slate-50); }
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .revenue-model {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .revenue-item {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      border: 1px solid var(--slate-200);
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .revenue-item .price {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--emerald-700);
+      white-space: nowrap;
+    }
+    .revenue-item h4 { font-weight: 700; color: var(--slate-900); margin-bottom: 0.25rem; }
+    .revenue-item p { font-size: 0.85rem; color: var(--slate-500); }
+    .revenue-projections {
+      background: var(--emerald-900);
+      border-radius: 20px;
+      padding: 2.5rem;
+      color: #fff;
+    }
+    .revenue-projections h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 800;
+    }
+    .projection-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      align-items: center;
+    }
+    .projection-row:last-child { border-bottom: none; }
+    .projection-year { color: var(--emerald-300); font-weight: 600; }
+    .projection-value { font-size: 1.4rem; font-weight: 800; }
+    .projection-stables { font-size: 0.8rem; color: var(--slate-400); }
+
+    /* ─── TRACTION ─── */
+    .traction-items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .traction-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--slate-200);
+    }
+    .traction-check {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--emerald-100);
+      color: var(--emerald-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+    .traction-item h4 { font-weight: 700; color: var(--slate-900); margin-bottom: 0.3rem; }
+    .traction-item p { font-size: 0.9rem; color: var(--slate-500); line-height: 1.5; }
+
+    /* ─── CTA ─── */
+    .cta {
+      background: linear-gradient(170deg, var(--emerald-900), var(--emerald-700));
+      text-align: center;
+      padding: 6rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .cta-content { position: relative; z-index: 2; }
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: #fff;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .cta p {
+      font-size: 1.15rem;
+      color: var(--emerald-200);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta .btn-primary { font-size: 1.1rem; padding: 1.1rem 2.5rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--slate-900);
+      color: var(--slate-400);
+      padding: 3rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--emerald-400); text-decoration: none; }
+    footer a:hover { color: var(--emerald-300); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .problem-grid, .revenue-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .features-grid, .platform-modules { grid-template-columns: 1fr; }
+      .market-numbers { grid-template-columns: repeat(2, 1fr); }
+      .traction-items { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 1.5rem; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="#065f46"/>
+        <path d="M12 28c0-6 4-14 8-16 4 2 8 10 8 16" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M20 12c-1-3-3-4-5-4" stroke="#34d399" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <circle cx="20" cy="22" r="2" fill="#34d399"/>
+      </svg>
+      <span>Nuestable</span>
+    </a>
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#market">Market</a>
+      <a href="#revenue">Business Model</a>
+      <a href="#traction">Traction</a>
+      <a href="#contact" class="nav-cta">Request Demo</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Seed Round — Now Open
+      </div>
+      <h1>The <span class="accent">Intelligent OS</span> for Horse Racing Stables</h1>
+      <p>Nuestable replaces spreadsheets, paper logs, and fragmented tools with one AI-powered platform — bringing modern operations, health compliance, and financial transparency to the $300B global horse racing industry.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">Request Investor Deck</a>
+        <a href="#platform" class="btn btn-outline">See the Platform</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">$300B+</div>
+          <div class="hero-stat-label">Global Racing Industry</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">75K+</div>
+          <div class="hero-stat-label">Racing Stables in the US</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">0</div>
+          <div class="hero-stat-label">Modern SaaS Competitors</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem" id="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div>
+          <div class="section-label fade-up">The Problem</div>
+          <h2 class="section-title fade-up">A $300 Billion Industry Running on Paper and Gut Instinct</h2>
+          <p class="section-subtitle fade-up" style="margin-top:1rem;">Horse racing stables manage millions in assets, yet most still rely on whiteboards, spreadsheets, and phone calls. HISA compliance alone has created an urgent need for digital record-keeping — and nobody is solving it.</p>
+        </div>
+        <div class="problem-stats fade-up">
+          <div class="problem-stat">
+            <div class="number">85%</div>
+            <div class="label">of stables use manual processes for daily operations</div>
+          </div>
+          <div class="problem-stat">
+            <div class="number">$42K</div>
+            <div class="label">avg. annual loss from medication withdrawal violations</div>
+          </div>
+          <div class="problem-stat">
+            <div class="number">3.5hrs</div>
+            <div class="label">daily admin time per trainer on reporting tasks</div>
+          </div>
+          <div class="problem-stat">
+            <div class="number">67%</div>
+            <div class="label">of owners cite lack of transparency as top concern</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-label fade-up">The Solution</div>
+      <h2 class="section-title fade-up">One Platform. Every Stable Operation.</h2>
+      <p class="section-subtitle fade-up">Purpose-built for the unique demands of horse racing — from medication withdrawal tracking to race eligibility matching.</p>
+
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon green">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Medication Withdrawal Tracking</h3>
+          <p>Real-time countdown timers for all 27 HISA-regulated substances. Automatic race entry blocking prevents costly violations before they happen.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon blue">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <h3>Race Intelligence Engine</h3>
+          <p>AI-powered eligibility matching analyzes class, distance, surface, and condition preferences. Confidence scoring helps trainers pick optimal races.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon purple">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <h3>AI Document Extraction</h3>
+          <p>Drop in vet reports, Coggins tests, or registration papers. Claude AI reads, categorizes, and extracts key data — eliminating manual entry.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon amber">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>
+          </div>
+          <h3>Financial Transparency</h3>
+          <p>Automatic expense tracking, invoice generation, and payout splitting by ownership percentage. Owners see exactly where every dollar goes.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon rose">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <h3>Health & Compliance Hub</h3>
+          <p>Vaccination schedules, injury tracking, vet records, and lab results — all in one place. Pre-race clearance checks ensure every horse is race-ready.</p>
+        </div>
+        <div class="feature-card fade-up">
+          <div class="feature-icon cyan">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <h3>Owner Portal</h3>
+          <p>Read-only access for syndicate owners with messaging, voting on major decisions, and full financial visibility. Builds trust and retains capital.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORM -->
+  <section class="platform" id="platform">
+    <div class="container">
+      <div class="section-label fade-up">Platform Architecture</div>
+      <h2 class="section-title fade-up">9 Integrated Modules. Zero Data Silos.</h2>
+      <p class="section-subtitle fade-up">Every module shares data intelligently — medication logs inform race eligibility, expenses flow into owner invoices, and health records drive pre-race clearance.</p>
+
+      <div class="platform-visual fade-up">
+        <div class="platform-modules">
+          <div class="module">
+            <div class="module-name">Race Intelligence</div>
+            <div class="module-desc">Eligibility matching, trip notes, live race day dashboard with real-time countdowns</div>
+            <span class="module-tag">AI-Powered</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Document AI</div>
+            <div class="module-desc">Upload, extract, and auto-categorize racing documents with expiry tracking</div>
+            <span class="module-tag">Claude API</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Daily Operations</div>
+            <div class="module-desc">Checklists, feed logs, therapy schedules, task board, and interactive barn map</div>
+            <span class="module-tag">Real-Time</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Owner Transparency</div>
+            <div class="module-desc">Messaging, syndicate voting, financial dashboards, and horse status views</div>
+            <span class="module-tag">Portal</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Health & Compliance</div>
+            <div class="module-desc">Medications, vaccinations, injuries, vet records, and HISA withdrawal periods</div>
+            <span class="module-tag">HISA Ready</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Financial Engine</div>
+            <div class="module-desc">Expense tracking, revenue, auto-invoicing, and ownership payout splitting</div>
+            <span class="module-tag">Automated</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Horse Profiles</div>
+            <div class="module-desc">Complete horse records: pedigree, ownership history, media, purchase/sale tracking</div>
+            <span class="module-tag">Comprehensive</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Notifications</div>
+            <div class="module-desc">Multi-channel alerts: in-app, email, SMS, and push with preference management</div>
+            <span class="module-tag">Multi-Channel</span>
+          </div>
+          <div class="module">
+            <div class="module-name">Authentication & RBAC</div>
+            <div class="module-desc">Multi-tenant orgs with role-based access: admin, trainer, vet, groom, owner</div>
+            <span class="module-tag">Enterprise</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET -->
+  <section id="market">
+    <div class="container">
+      <div class="section-label fade-up">Market Opportunity</div>
+      <h2 class="section-title fade-up">Massive Market. Zero Modern Solutions.</h2>
+      <p class="section-subtitle fade-up">The horse racing industry generates hundreds of billions in economic activity, yet stable management software is stuck in the 1990s.</p>
+
+      <div class="market-numbers">
+        <div class="market-card fade-up">
+          <div class="market-value">$300B+</div>
+          <div class="market-label">Global Racing Industry</div>
+          <div class="market-sublabel">Annual economic impact</div>
+        </div>
+        <div class="market-card fade-up">
+          <div class="market-value">$11B</div>
+          <div class="market-label">US Handle Volume</div>
+          <div class="market-sublabel">Pari-mutuel wagering</div>
+        </div>
+        <div class="market-card fade-up">
+          <div class="market-value">75K+</div>
+          <div class="market-label">US Racing Stables</div>
+          <div class="market-sublabel">Immediate addressable market</div>
+        </div>
+        <div class="market-card fade-up">
+          <div class="market-value">$2.4B</div>
+          <div class="market-label">SAM Opportunity</div>
+          <div class="market-sublabel">SaaS at $200-800/mo per stable</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVENUE -->
+  <section class="revenue" id="revenue">
+    <div class="container">
+      <div class="section-label fade-up">Business Model</div>
+      <h2 class="section-title fade-up">Predictable SaaS Revenue with Vertical Expansion</h2>
+
+      <div class="revenue-grid">
+        <div class="revenue-model fade-up">
+          <div class="revenue-item">
+            <div>
+              <div class="price">$199/mo</div>
+            </div>
+            <div>
+              <h4>Starter</h4>
+              <p>Up to 10 horses. Core operations, health tracking, and basic reporting.</p>
+            </div>
+          </div>
+          <div class="revenue-item">
+            <div>
+              <div class="price">$499/mo</div>
+            </div>
+            <div>
+              <h4>Professional</h4>
+              <p>Up to 40 horses. Full platform with AI documents, owner portal, and race intelligence.</p>
+            </div>
+          </div>
+          <div class="revenue-item">
+            <div>
+              <div class="price">$899/mo</div>
+            </div>
+            <div>
+              <h4>Enterprise</h4>
+              <p>Unlimited horses. Custom integrations, dedicated support, multi-location, and API access.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="revenue-projections fade-up">
+          <h3>Revenue Projections</h3>
+          <div class="projection-row">
+            <div>
+              <div class="projection-year">Year 1</div>
+              <div class="projection-stables">50 stables</div>
+            </div>
+            <div class="projection-value">$360K ARR</div>
+          </div>
+          <div class="projection-row">
+            <div>
+              <div class="projection-year">Year 2</div>
+              <div class="projection-stables">250 stables</div>
+            </div>
+            <div class="projection-value">$1.8M ARR</div>
+          </div>
+          <div class="projection-row">
+            <div>
+              <div class="projection-year">Year 3</div>
+              <div class="projection-stables">1,000 stables</div>
+            </div>
+            <div class="projection-value">$7.2M ARR</div>
+          </div>
+          <div class="projection-row">
+            <div>
+              <div class="projection-year">Year 5</div>
+              <div class="projection-stables">5,000 stables</div>
+            </div>
+            <div class="projection-value">$36M ARR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACTION -->
+  <section id="traction">
+    <div class="container">
+      <div class="section-label fade-up">Traction & Milestones</div>
+      <h2 class="section-title fade-up">Built and Ready to Deploy</h2>
+      <p class="section-subtitle fade-up">We've built the complete platform and are entering our pilot phase.</p>
+
+      <div class="traction-items">
+        <div class="traction-item fade-up">
+          <div class="traction-check">&#10003;</div>
+          <div>
+            <h4>Full MVP Complete</h4>
+            <p>9 integrated modules, 87 frontend components, 35 database models, and 3 background workers — all production-ready.</p>
+          </div>
+        </div>
+        <div class="traction-item fade-up">
+          <div class="traction-check">&#10003;</div>
+          <div>
+            <h4>AI Integration Live</h4>
+            <p>Claude-powered document extraction pipeline processes vet reports, Coggins tests, and registration papers automatically.</p>
+          </div>
+        </div>
+        <div class="traction-item fade-up">
+          <div class="traction-check">&#10003;</div>
+          <div>
+            <h4>HISA Compliance Built-In</h4>
+            <p>27 regulated medications with accurate withdrawal periods, automatic race entry blocking, and full audit trail.</p>
+          </div>
+        </div>
+        <div class="traction-item fade-up">
+          <div class="traction-check">&#10003;</div>
+          <div>
+            <h4>Mobile-Ready Architecture</h4>
+            <p>React Native mobile app scaffolded with Expo. Responsive web app works on tablets for barn-side use today.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="cta-content">
+      <h2>Ready to Modernize Horse Racing?</h2>
+      <p>We're raising our seed round to launch pilots with top stables across the US. Let's talk.</p>
+      <a href="mailto:invest@nuestable.com" class="btn btn-primary">Contact Us &rarr;</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Nuestable, Inc. &nbsp;&middot;&nbsp; Intelligent Horse Management Engine &nbsp;&middot;&nbsp; <a href="mailto:invest@nuestable.com">invest@nuestable.com</a></p>
+  </footer>
+
+  <script>
+    // Scroll-triggered fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

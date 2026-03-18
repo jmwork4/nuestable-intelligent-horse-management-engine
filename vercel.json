@@ -1,0 +1,16 @@
+{
+  "buildCommand": "pnpm --filter @nuestable/shared build && pnpm --filter @nuestable/web build",
+  "outputDirectory": "apps/web/dist",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://nuestable-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/socket.io/:path*",
+      "destination": "https://nuestable-api.onrender.com/socket.io/:path*"
+    }
+  ]
+}

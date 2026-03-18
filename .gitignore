@@ -9,3 +9,5 @@ coverage/
 .next/
 uploads/
 *.tsbuildinfo
+docker/pgdata/
+docker/redisdata/

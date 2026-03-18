@@ -1,0 +1,51 @@
+# Render Blueprint — deploy API + PostgreSQL + Redis
+# Deploy: connect your GitHub repo at https://dashboard.render.com/blueprints
+
+databases:
+  - name: nuestable-db
+    plan: free
+    databaseName: nuestable
+    user: nuestable
+
+services:
+  - type: redis
+    name: nuestable-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+  - type: web
+    name: nuestable-api
+    plan: free
+    runtime: node
+    buildCommand: |
+      corepack enable &&
+      corepack prepare pnpm@10.32.1 --activate &&
+      pnpm install --frozen-lockfile &&
+      pnpm --filter @nuestable/shared build &&
+      pnpm --filter @nuestable/api build &&
+      cd apps/api && npx prisma generate && npx prisma migrate deploy
+    startCommand: node apps/api/dist/src/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nuestable-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: nuestable-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://nuestable.vercel.app
+      - key: LOG_LEVEL
+        value: info

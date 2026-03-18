@@ -14,7 +14,7 @@ export default fp(
     const env = getEnv();
 
     const redis = new Redis(env.REDIS_URL, {
-      maxRetriesPerRequest: 3,
+      maxRetriesPerRequest: null,
       retryStrategy(times: number) {
         if (times > 10) {
           fastify.log.error("Redis: max retry attempts reached, giving up");

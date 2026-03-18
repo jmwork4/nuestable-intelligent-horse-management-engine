@@ -1,4 +1,4 @@
-version: "3.9"
+name: nuestable
 
 services:
   postgres:
@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: nuestable
       POSTGRES_DB: nuestable
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +22,7 @@ services:
     image: redis:7-alpine
     container_name: nuestable-redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redisdata:/data
     healthcheck:
@@ -33,7 +33,7 @@ services:
 
   api:
     build:
-      context: ..
+      context: .
       dockerfile: apps/api/Dockerfile
     container_name: nuestable-api
     environment:
@@ -55,11 +55,11 @@ services:
 
   web:
     build:
-      context: ..
+      context: .
       dockerfile: apps/web/Dockerfile
     container_name: nuestable-web
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - api
 

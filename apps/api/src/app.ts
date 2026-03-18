@@ -2,8 +2,11 @@ import Fastify, { type FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import fastifySensible from "@fastify/sensible";
 import fastifyHelmet from "@fastify/helmet";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 import { getEnv } from "./config/env.js";
-import { createLogger } from "./lib/logger.js";
 import { AppError } from "./lib/errors.js";
 
 // Plugins
@@ -40,10 +43,18 @@ export async function buildApp(
   options: BuildAppOptions = {},
 ): Promise<FastifyInstance> {
   const env = getEnv();
-  const logger = createLogger();
-
   const app = Fastify({
-    logger,
+    logger: {
+      level: env.LOG_LEVEL || "info",
+      ...(env.NODE_ENV === "production" && {
+        formatters: {
+          level(label: string) {
+            return { level: label };
+          },
+        },
+        timestamp: () => `,"time":"${new Date().toISOString()}"`,
+      }),
+    },
     trustProxy: true,
     ajv: {
       customOptions: {
@@ -53,6 +64,10 @@ export async function buildApp(
       },
     },
   });
+
+  // Zod validation & serialization
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
 
   // Global error handler
   app.setErrorHandler((error, request, reply) => {
@@ -129,28 +144,12 @@ export async function buildApp(
   await app.register(multitenancyPlugin);
 
   // Health check route
-  app.get("/health", {
-    schema: {
-      tags: ["system"],
-      description: "Health check endpoint",
-      response: {
-        200: {
-          type: "object",
-          properties: {
-            status: { type: "string" },
-            timestamp: { type: "string" },
-            uptime: { type: "number" },
-          },
-        },
-      },
-    },
-    handler: async () => {
-      return {
-        status: "ok",
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-      };
-    },
+  app.get("/health", async () => {
+    return {
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+    };
   });
 
   // Register module routes

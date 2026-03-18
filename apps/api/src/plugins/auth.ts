@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 import fastifyJwt from "@fastify/jwt";
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { getEnv } from "../config/env.js";
 import {
   ACCESS_TOKEN_EXPIRY,
@@ -23,6 +23,8 @@ declare module "@fastify/jwt" {
 
 declare module "fastify" {
   interface FastifyInstance {
+    authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+    authorize: (roles: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     signAccessToken: (payload: Omit<JwtPayload, "type">) => string;
     signRefreshToken: (payload: Omit<JwtPayload, "type">) => string;
   }
@@ -37,6 +39,27 @@ export default fp(
       sign: {
         expiresIn: ACCESS_TOKEN_EXPIRY,
       },
+    });
+
+    fastify.decorate("authenticate", async function (request: FastifyRequest, reply: FastifyReply) {
+      try {
+        await request.jwtVerify();
+      } catch (err) {
+        reply.send(err);
+      }
+    });
+
+    fastify.decorate("authorize", function (roles: string[]) {
+      return async function (request: FastifyRequest, reply: FastifyReply) {
+        if (!request.user || !roles.includes(request.user.role)) {
+          return reply.status(403).send({
+            error: {
+              code: "FORBIDDEN",
+              message: "Insufficient permissions",
+            },
+          });
+        }
+      };
     });
 
     fastify.decorate("signAccessToken", function (payload: Omit<JwtPayload, "type">): string {
