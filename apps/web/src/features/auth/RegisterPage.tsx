@@ -51,7 +51,7 @@ export default function RegisterPage() {
       {/* Left panel - Brand */}
       <div className="hidden lg:flex lg:w-1/2 bg-brand-600 flex-col items-center justify-center p-12">
         <div className="max-w-md text-center">
-          <h1 className="text-5xl font-bold text-white mb-4">Nuestable</h1>
+          <h1 className="text-5xl font-bold text-white mb-4">NueStable</h1>
           <p className="text-xl text-brand-200 leading-relaxed">
             The intelligent engine behind every winning stable
           </p>
@@ -85,7 +85,7 @@ export default function RegisterPage() {
       <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           <div className="lg:hidden mb-8 text-center">
-            <h1 className="text-3xl font-bold text-brand-600">Nuestable</h1>
+            <h1 className="text-3xl font-bold text-brand-600">NueStable</h1>
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Create your account</h2>

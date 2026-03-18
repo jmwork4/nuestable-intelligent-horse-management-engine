@@ -98,8 +98,10 @@ const navigation: NavItem[] = [
 ];
 
 export function Sidebar() {
-  const { sidebarCollapsed, toggleSidebar } = useUIStore();
+  const { sidebarCollapsed, toggleSidebar, setMobileSidebarOpen } = useUIStore();
   const location = useLocation();
+
+  const closeMobile = () => setMobileSidebarOpen(false);
 
   return (
     <aside
@@ -111,7 +113,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-brand-700">
         {!sidebarCollapsed && (
-          <span className="text-lg font-bold text-white tracking-tight">Nuestable</span>
+          <span className="text-lg font-bold text-white tracking-tight">NueStable</span>
         )}
         <button
           onClick={toggleSidebar}
@@ -138,12 +140,13 @@ export function Sidebar() {
             <div key={item.label}>
               <NavLink
                 to={item.href}
+                onClick={closeMobile}
                 className={cn(
                   'sidebar-link',
                   (isActive || isParentActive) && 'sidebar-link-active',
                   sidebarCollapsed && 'justify-center px-0',
                 )}
-                title={sidebarCollapsed ? item.label : undefined}
+                title={item.label}
               >
                 <span className="flex-shrink-0">{item.icon}</span>
                 {!sidebarCollapsed && <span>{item.label}</span>}
@@ -156,6 +159,7 @@ export function Sidebar() {
                     <NavLink
                       key={child.href}
                       to={child.href}
+                      onClick={closeMobile}
                       className={({ isActive: childActive }) =>
                         cn(
                           'block rounded-lg px-3 py-2 text-xs font-medium transition-colors min-h-[36px] flex items-center',

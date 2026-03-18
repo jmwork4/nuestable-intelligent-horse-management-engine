@@ -38,7 +38,7 @@ export function Header() {
       {/* Org name */}
       <div className="hidden lg:block">
         <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-          {user?.organizationName || 'Nuestable'}
+          {user?.organizationName || 'NueStable'}
         </h2>
       </div>
 
